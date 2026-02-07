@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Glow Filter -->
+  <defs>
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Floppy Disk Body -->
+  <path d="M10 4 H50 L58 12 V60 H10 V4 Z" fill="#001100" stroke="#00ff00" stroke-width="2" filter="url(#neon-glow)"/>
+
+  <!-- Top Shutter Area -->
+  <rect x="20" y="4" width="24" height="18" fill="none" stroke="#00ff00" stroke-width="1.5" filter="url(#neon-glow)"/>
+  
+  <!-- Label Area (Bottom) -->
+  <rect x="18" y="38" width="28" height="18" fill="none" stroke="#ff00aa" stroke-width="1.5" filter="url(#neon-glow)"/>
+  
+  <!-- "Garbage" Text Representation (Lines) -->
+  <line x1="22" y1="44" x2="42" y2="44" stroke="#ff00aa" stroke-width="1" />
+  <line x1="22" y1="48" x2="38" y2="48" stroke="#ff00aa" stroke-width="1" />
+  <line x1="22" y1="52" x2="40" y2="52" stroke="#ff00aa" stroke-width="1" />
+
+</svg>

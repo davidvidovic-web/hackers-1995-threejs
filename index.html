@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hackers ( 1995 ) - David Vidovic - Animated Experience</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1WKDT99NL1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1WKDT99NL1');
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    
+    <!-- UI Overlay (Intro, Loading, Menu) -->
+    <div id="ui-overlay">
+        <div id="loading-screen">
+            <h1>SYSTEM INITIALIZATION</h1>
+            <div class="loader-bar"><div class="loader-progress" id="load-bar"></div></div>
+            <div id="load-text">LOADING ASSETS...</div>
+        </div>
+        <div id="start-screen" style="display:none">
+            <div class="box-message">
+                <h2>AUDIO CONFIGURATION</h2>
+                <p style="margin-bottom:20px; font-size: 14px; opacity: 0.8">
+                    This movie has a kickass soundtrack that really enhances the vibe. I highly recommend enabling sound for the full experience, but the choice is yours.
+                </p>
+                <button id="btn-sound-yes" class="cyber-btn">ENABLE SOUND</button>
+                <button id="btn-sound-no" class="cyber-btn">MUTE</button>
+                <p style="margin-top: 25px; font-size: 12px; opacity: 0.7; border-top: 1px dashed rgba(0,255,255,0.3); padding-top: 10px;">
+                    Extended OST provided by <a href="https://x.com/josesaezmerino/" target="_blank" style="color: #00ffff; text-decoration: none;">@josesaezmerino</a>
+                </p>
+            </div>
+        </div>
+        <div id="instructions-screen" style="display:none">
+            <div class="box-message" style="max-width: 600px;">
+                <h2>CONTROLS</h2>
+                <div style="display: flex; gap: 20px; text-align: left; margin-bottom: 20px; justify-content: center;">
+                    <div style="flex: 1;">
+                        <h3 style="color:#fff; border-bottom: 1px solid #00ffff; padding-bottom: 5px;">DESKTOP</h3>
+                        <ul style="list-style: none; padding: 0; font-size: 13px; line-height: 1.6;">
+                            <li>[W,A,S,D] : Move</li>
+                            <li>[Q, E]    : Rotate View</li>
+                            <li>[SPACE]   : Fly Up</li>
+                            <li>[SHIFT]   : Fly Down</li>
+                            <li>[MOUSE]   : Look / Interact</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="color:#fff; border-bottom: 1px solid #00ffff; padding-bottom: 5px;">MOBILE</h3>
+                        <ul style="list-style: none; padding: 0; font-size: 13px; line-height: 1.6;">
+                            <li>[L-STICK] : Move</li>
+                            <li>[R-STICK] : Look Around</li>
+                            <li>[2 FINGERS]: Fly Up/Down</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px; border: 1px dashed rgba(0,255,255,0.5); padding: 10px;">
+                    <strong style="color:#fff">MUSIC PLAYER HUD</strong><br>
+                    <span style="font-size: 12px;">Top Center of Screen</span><br>
+                    <span style="font-size: 12px;">TAP SONG TITLE to PLAY / PAUSE</span>
+                </div>
+                <div style="margin-bottom: 20px; font-style: italic; color: #ff00ff; text-shadow: 0 0 5px #ff00ff; animation: blink 2s infinite;">
+                    "They are trashing our rights! Trashing! Trashing!"
+                </div>
+                <button id="btn-enter" class="cyber-btn">ENTER MAINFRAME</button>
+                <button id="btn-menu-leaderboard" class="cyber-link" style="margin-top: 5px; width: 100%;">VIEW LEADERBOARD</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Garbage Modal (Copy/Progress & Leaderboard) -->
+    <div id="garbage-modal" class="hidden" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        z-index: 30000;
+        transition: opacity 0.3s;
+    ">
+        <canvas id="garbage-canvas" style="position:absolute; top:0; left:0; width:100%; height:100%; image-rendering: pixelated;"></canvas>
+        
+        <!-- Container for the 3 visual elements -->
+        <div id="garbage-ui-container" style="position: relative; z-index: 10; width: 80%; max-width: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px;">
+            
+            <!-- 1. Floppy Disk Icon -->
+            <svg width="250" height="250" viewBox="0 0 100 100" style="filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.5)); transform: rotate(-5deg);">
+                <!-- Disk Body -->
+                <rect x="10" y="10" width="80" height="80" fill="#e0e0e0" stroke="#888" stroke-width="2"/>
+                <rect x="10" y="85" width="80" height="5" fill="#333" />
+                <!-- Shutter -->
+                <rect x="30" y="10" width="40" height="35" fill="#ccc" stroke="#888" stroke-width="1"/>
+                <rect x="35" y="15" width="20" height="25" fill="#111" /> <!-- Window -->
+                <!-- Label Area -->
+                <rect x="25" y="55" width="50" height="30" fill="#fff" stroke="#ccc" stroke-width="1"/>
+                <line x1="30" y1="65" x2="70" y2="65" stroke="#ccc" stroke-width="1"/>
+                <line x1="30" y1="75" x2="70" y2="75" stroke="#ccc" stroke-width="1"/>
+                <!-- Arrow -->
+                <path d="M15 45 L 15 25 L 20 25 M 15 30 L 20 30" stroke="#666" fill="none" stroke-width="1"/>
+                <text x="70" y="40" font-family="monospace" font-size="12" fill="#666" style="font-weight:bold;">HD</text>
+            </svg>
+
+            <!-- 2. Retro Progress Bar -->
+            <div style="width: 100%; display:flex; flex-direction: column; align-items: center; position: relative;">
+                <div style="
+                    width: 100%; 
+                    height: 60px; 
+                    border: 4px solid #fff; 
+                    background: #cc0000; /* Red Background */
+                    position: relative;
+                    box-shadow: 10px 10px 0px rgba(0,0,0,0.4);
+                ">
+                    <!-- Yellow Squares Progress -->
+                    <div id="garbage-bar" style="
+                        width: 0%; 
+                        height: 100%; 
+                        background: repeating-linear-gradient(90deg, #ccff00 0px, #ccff00 4px, transparent 4px, transparent 5px);
+                    "></div>
+                    
+                    <!-- Text Overlay -->
+                    <div style="
+                        position: absolute; 
+                        top: 0; left: 0; width: 100%; height: 100%; 
+                        display: flex; justify-content: center; align-items: center;
+                    ">
+                        <span id="garbage-status" style="
+                            font-family: 'Courier New', monospace; 
+                            font-weight: bold; 
+                            font-size: 32px; 
+                            color: #000; 
+                            text-shadow: 1px 1px 0 rgba(255,255,255,0.2);
+                            letter-spacing: 1px;
+                            text-transform: lowercase;
+                        ">Copying</span>
+                    </div>
+                </div>
+                
+                <button id="btn-garbage-close" class="retro-bw-btn hidden" style="
+                    margin-top: 20px; 
+                    align-self: center; 
+                ">CLOSE</button>
+
+                <!-- Leaderboard Logic -->
+                 <div id="leaderboard-form" class="hidden" style="display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:20px;">
+                     <input type="text" id="alias-input" class="retro-input" placeholder="ENTER ALIAS" maxlength="15">
+                     <button id="btn-submit-score" class="retro-bw-btn" style="width: 100%;">SUBMIT</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div id="leaderboard-display" class="hidden" style="
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            box-sizing: border-box;
+            background: #000; border: none; padding: 20px;
+            font-family: 'Courier New', monospace; color: #fff; z-index: 31000;
+            overflow-y: auto; overflow-x: hidden;
+        ">
+            <h2 style="color: #00ffff; text-shadow: 0 0 10px #00ffff; margin: 0 0 20px 0; letter-spacing: 2px; text-align: center; word-break: break-word; font-size: 24px;">RECOGNIZED_HACKERS</h2>
+            
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0 5px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #333; color: #666; font-size: 12px;">
+                        <th class="lb-col-rank">[RANK]</th>
+                        <th class="lb-col-alias">[ALIAS]</th>
+                        <th class="lb-col-time">[TIME]</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body" style="font-size: 14px;">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+            
+            <div id="lb-loader" style="display:none; margin: 20px 0; color: #00ffff; animation: blink 1s infinite;">CONNECTING TO DATABASE...</div>
+            <div id="lb-load-more" style="display:none; margin: 20px 0; text-align: center;">
+                <button class="cyber-btn" style="font-size: 12px; padding: 8px 16px;">LOAD_MORE_RECORDS()</button>
+            </div>
+
+            <button id="btn-lb-close" class="cyber-btn" style="margin-top: 30px; width: 100%;">SYSTEM_EXIT()</button>
+        </div>
+    </div>
+
+    <!-- Music Player Container -->
+    <div id="music-player-container">
+        <div id="yt-placeholder"></div>
+        <button id="btn-prev" class="player-btn">&lt;</button>
+        <div id="song-info">[ TAP TO INITIALIZE SYSTEM ]</div>
+        <button id="btn-next" class="player-btn">&gt;</button>
+    </div>
+
+    <!-- Author Footer -->
+    <div id="author-footer">
+        <a href="https://davidvidovic.com" target="_blank">By David Vidovic</a>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

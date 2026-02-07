@@ -1,0 +1,19 @@
+{
+  "name": "hackers-threejs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "vercel dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0",
+    "@libsql/client": "^0.6.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
